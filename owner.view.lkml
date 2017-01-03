@@ -14,7 +14,7 @@ view: owner {
 
   dimension: own_addr_city {
     map_layer_name: world_cities
-    sql: ${TABLE}.own_addr_city ;;
+    sql: UPPER(${TABLE}.own_addr_city) ;;
   }
 
   dimension: own_addr_country_cd {
