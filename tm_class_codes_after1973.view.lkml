@@ -1,6 +1,8 @@
 view: tm_class_codes_after1973 {
   sql_table_name: trademark.tm_class_codes_after1973 ;;
 
+  label: "TM Class Codes After 1973"
+
   dimension: mark_class_code {
     primary_key: yes
     type: string

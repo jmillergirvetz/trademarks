@@ -1,4 +1,5 @@
 view: us_class {
+  label: "US Class"
   sql_table_name: trademark.us_class ;;
 
   dimension: class_id {

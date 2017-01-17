@@ -1,6 +1,8 @@
 view: tm_class_codes_before1973 {
   sql_table_name: trademark.tm_class_codes_before1973 ;;
 
+  label: "TM Class Codes Before 1973"
+
   dimension: mark_class_code_old {
     primary_key: yes
     type: string
@@ -22,4 +24,5 @@ view: tm_class_codes_before1973 {
     type: list
     list_field: mark_class_title_old
   }
+
 }
