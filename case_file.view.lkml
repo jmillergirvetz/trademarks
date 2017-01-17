@@ -211,9 +211,10 @@ view: case_file {
     sql: ${TABLE}.ir_registration_no ;;
   }
 
-  dimension: ir_renewal_dt {
-    type: string
-    sql: ${TABLE}.ir_renewal_dt ;;
+  dimension_group: ir_renewal_dt {
+    type: time
+    timeframes: [date, year, month, day_of_year]
+    sql: CAST(${TABLE}.ir_renewal_dt as timestamp) ;;
   }
 
   dimension: ir_status_cd {
