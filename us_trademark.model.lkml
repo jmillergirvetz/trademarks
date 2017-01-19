@@ -51,7 +51,7 @@ explore: case_file {
   join: attorney_owners {
     from: owner
     relationship: many_to_many
-    sql_on: ${case_file.exm_attorney_name} = ${owner.own_name_} ;;
+    sql_on: ${case_file.exm_attorney_name} = ${attorney_owners.own_name_} ;;
   }
   join: prior_mark {
     relationship: many_to_one
