@@ -51,4 +51,12 @@ view: correspondent_domrep_attorney {
     type: count
     drill_fields: [attorney_name, domestic_rep_name]
   }
+
+  measure: count_attorney_ass_cases {
+    type: count
+    filters: {
+      field: correspondent_domrep_attorney.attorney_name
+      value: "-NULL"
+    }
+  }
 }
