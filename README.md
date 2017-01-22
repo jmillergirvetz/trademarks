@@ -38,3 +38,9 @@ Even though there was an attempt in 1891 to establish an international trademark
 * The lack of national trademark systems
 
 Thus, in 1989 the Protocol Relating to the Madrid Agreement was brought to the table. Finally, with many ammendments and changes, in 1996 the Madrid Protocol was established. This Protocol is the modern international trademark system. This is the basis for why we start to see an large increase in international trademarks in 2005.
+
+**Correspondent Trademark Attorneys**
+
+In 1976, section 2.11 was ammended to [The Code of Federal Regulations of the United States of America](https://books.google.com/books?id=6vo6AAAAIAAJ&pg=PA136&lpg=PA136&dq=were+there+trademark+case+attorneys+before+1970s?&source=bl&ots=GwxnEn7EhZ&sig=-fGlJzVbnUMURV1uLbgTy1wU_8M&hl=en&sa=X&ved=0ahUKEwinj8ra6dbRAhXmiVQKHV9EDRQQ6AEIKzAD#v=onepage&q=were%20there%20trademark%20case%20attorneys%20before%201970s%3F&f=false), which allowed correspondent case attorneys to act on behalf of a trademeark owner.
+
+Here is a direct reference from Cornell Law about section [37 CFR 2.11 - Applicants may be represented by an attorney.](https://www.law.cornell.edu/cfr/text/37/2.11).

@@ -52,8 +52,17 @@ view: correspondent_domrep_attorney {
     drill_fields: [attorney_name, domestic_rep_name]
   }
 
-  measure: count_attorney_ass_cases {
+  measure: count_corr_attorney_cases {
     type: count
+    filters: {
+      field: correspondent_domrep_attorney.attorney_name
+      value: "-NULL"
+    }
+  }
+
+  measure: distinct_count_corr_attorney_cases {
+    label: "Total Distinct Corr. Attorney"
+    type: count_distinct
     filters: {
       field: correspondent_domrep_attorney.attorney_name
       value: "-NULL"
