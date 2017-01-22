@@ -3,7 +3,7 @@ view: correspondent_domrep_attorney {
 
   dimension: attorney_name {
     type: string
-    sql: ${TABLE}.attorney_name ;;
+    sql: UPPER(REPLACE(${TABLE}.attorney_name, ',', '')) ;;
   }
 
   dimension: attorney_no {

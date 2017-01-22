@@ -217,18 +217,34 @@ view: owner {
     sql: ${TABLE}.serial_no ;;
   }
 
-  measure: count_tm_with_owner {
-    label: "Count Trademarks with Owner"
-    type: count
+  dimension: own_name_and_alt_name {
+    type: yesno
+    sql: ${own_name_} IS NOT NULL OR ${own_altn_name} IS NOT NULL;;
+  }
+
+  measure: distinct_tm_with_owner {
+    label: "Count Distinct TMs with Owner"
+    type: count_distinct
+    sql: ${own_name_} ;;
     filters: {
-      field: owner.own_name_
+      field: own_name_
       value: "-NULL"
     }
   }
 
+  measure: total_tm_with_owner {
+    type: number
+    sql: SUM(CASE WHEN ${own_name_and_alt_name} THEN 1 ELSE 0 END) ;;
+    drill_fields: [own_name, own_altn_name, own_addr_city, own_addr_state_cd, own_nalty_country_cd, own_addr_1]
+  }
+
   measure: count {
     type: count
-    drill_fields: [own_altn_name, own_name]
+    drill_fields: [own_name, own_altn_name]
+  }
+
+  measure: count_serial_num {
+    type: count
   }
 
 }
