@@ -5,9 +5,9 @@ view: correspondent_domrep_attorney {
     type: string
     sql: UPPER(${TABLE}.attorney_name) ;;
   }
-  dimension: attorney_name_formatted {
+  dimension: readable_attorney_name {
     type: string
-    sql: UPPER(REGEXP_EXTRACT(${TABLE}.attorney_name, r'[A-Za-z ]+')) ;;
+    sql: REPLACE(UPPER(REGEXP_EXTRACT(${TABLE}.attorney_name, r'[A-Za-z0-9 ]+')), 'ESQ', '') ;;
   }
 
   dimension: attorney_no {
@@ -69,4 +69,9 @@ view: correspondent_domrep_attorney {
     type: count_distinct
     sql: ${TABLE}.attorney_name ;;
   }
+
+#   measure: count_readable_corr_attorney_names {
+#     type: count
+#     sql: ${TABLE}.readable_attorney_name ;;
+#   }
 }
