@@ -1,13 +1,25 @@
 view: correspondent_domrep_attorney {
   sql_table_name: trademark.correspondent_domrep_attorney ;;
 
-  dimension: attorney_name {
+  dimension: attorney_name_orig {
     type: string
     sql: UPPER(${TABLE}.attorney_name) ;;
   }
+
+  dimension:attorney_name_remove_address {
+    hidden: yes
+    type: string
+    sql: CASE WHEN REGEXP_CONTAINS(${attorney_name_orig}, r"STREET") = true THEN NULL ELSE ${TABLE}.attorney_name END ;;
+  }
+
   dimension: readable_attorney_name {
     type: string
-    sql: REPLACE(UPPER(REGEXP_EXTRACT(${TABLE}.attorney_name, r'[A-Za-z0-9 ]+')), 'ESQ', '') ;;
+    sql: REPLACE(REGEXP_EXTRACT(${attorney_name_remove_address}, r'[A-Z ]+'), 'ESQ', '') ;;
+  }
+
+  dimension: filter_readable_attorney_name {
+    type: yesno
+    sql: ${readable_attorney_name} = ''  ;;
   }
 
   dimension: attorney_no {
@@ -53,13 +65,13 @@ view: correspondent_domrep_attorney {
 
   measure: count {
     type: count
-    drill_fields: [attorney_name, domestic_rep_name]
+    drill_fields: [attorney_name_orig, domestic_rep_name]
   }
 
   measure: count_corr_attorney_cases {
     type: count
     filters: {
-      field: correspondent_domrep_attorney.attorney_name
+      field: correspondent_domrep_attorney.readable_attorney_name
       value: "-NULL"
     }
   }
@@ -70,8 +82,12 @@ view: correspondent_domrep_attorney {
     sql: ${TABLE}.attorney_name ;;
   }
 
-#   measure: count_readable_corr_attorney_names {
-#     type: count
-#     sql: ${TABLE}.readable_attorney_name ;;
-#   }
+  measure: count_null {
+    type: count
+    filters: {
+      field: correspondent_domrep_attorney.readable_attorney_name
+      value: "NULL"
+    }
+  }
+
 }
