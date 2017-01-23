@@ -19,7 +19,7 @@ explore: case_file {
     sql_on: ${case_file.serial_no} = ${classification.serial_no} ;;
   }
   join: correspondent_domrep_attorney {
-    relationship: one_to_many
+    relationship: one_to_one
     sql_on: ${case_file.serial_no} = ${correspondent_domrep_attorney.serial_no} ;;
   }
   join: design_search {

@@ -3,7 +3,11 @@ view: correspondent_domrep_attorney {
 
   dimension: attorney_name {
     type: string
-    sql: UPPER(REPLACE(${TABLE}.attorney_name, ',', '')) ;;
+    sql: UPPER(${TABLE}.attorney_name) ;;
+  }
+  dimension: attorney_name_formatted {
+    type: string
+    sql: UPPER(REGEXP_EXTRACT(${TABLE}.attorney_name, r'[A-Za-z ]+')) ;;
   }
 
   dimension: attorney_no {
@@ -61,11 +65,8 @@ view: correspondent_domrep_attorney {
   }
 
   measure: distinct_count_corr_attorney_cases {
-    label: "Total Distinct Corr. Attorney"
+    label: "Total Distinct Corr Attorney"
     type: count_distinct
-    filters: {
-      field: correspondent_domrep_attorney.attorney_name
-      value: "-NULL"
-    }
+    sql: ${TABLE}.attorney_name ;;
   }
 }
