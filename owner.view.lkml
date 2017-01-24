@@ -249,12 +249,12 @@ view: owner {
 
   measure:list_tm_class_codes_bfr_1973{
     type: list
-    list_field: tm_class_codes_before1973.mark_class_combined
+    list_field: tm_class_codes_before1973.mark_class_title_old
   }
 
   measure: list_tm_class_codes_aftr_1973 {
     type: list
-    list_field: tm_class_codes_after1973.mark_class_combined
+    list_field: tm_class_codes_after1973.mark_class_title
   }
 
 }
