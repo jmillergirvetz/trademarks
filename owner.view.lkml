@@ -85,7 +85,7 @@ view: owner {
 
   dimension: own_name_ {
     type: string
-    sql: CASE WHEN ${TABLE}.own_name LIKE '%Mattel%' OR ${TABLE}.own_name LIKE '%MATTEL%' THEN "Mattel, Inc."
+    sql: UPPER(CASE WHEN ${TABLE}.own_name LIKE '%Mattel%' OR ${TABLE}.own_name LIKE '%MATTEL%' THEN "Mattel, Inc."
               WHEN ${TABLE}.own_name LIKE '%Disney%' OR ${TABLE}.own_name LIKE '%DISNEY%' THEN 'Disney Enterprises, Inc.'
               WHEN ${TABLE}.own_name LIKE '%Apple %' OR ${TABLE}.own_name LIKE '%APPLE %'
                 OR ${TABLE}.own_name LIKE '%Apple,%' OR ${TABLE}.own_name LIKE '%APPLE,%'THEN 'Apple, Inc.'
@@ -113,7 +113,7 @@ view: owner {
               WHEN ${TABLE}.own_name LIKE '%Anheuser-Busch%' OR ${TABLE}.own_name LIKE '%ABHEUSER-BUSCH%' THEN 'Anheuser-Busch, Inc.'
               WHEN ${TABLE}.own_name LIKE '%Sara Lee%' OR ${TABLE}.own_name LIKE '%SARA LEE%' THEN 'Sara Lee Corp.'
               ELSE ${TABLE}.own_name
-              END ;;
+              END) ;;
   }
 
 # can't return table value within else so need to use case statemenet like above
@@ -245,6 +245,16 @@ view: owner {
 
   measure: count_serial_num {
     type: count
+  }
+
+  measure:list_tm_class_codes_bfr_1973{
+    type: list
+    list_field: tm_class_codes_before1973.mark_class_combined
+  }
+
+  measure: list_tm_class_codes_aftr_1973 {
+    type: list
+    list_field: tm_class_codes_after1973.mark_class_combined
   }
 
 }

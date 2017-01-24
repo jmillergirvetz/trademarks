@@ -23,6 +23,7 @@ view: attorney_assigned_marks {
   }
 
   measure: count {
+    hidden: yes
     type: count
     drill_fields: [detail*]
   }
@@ -45,7 +46,19 @@ view: attorney_assigned_marks {
     sql: ${TABLE}.total_marks ;;
   }
 
-  measure: registered_marks {
+  measure: count_marks {
+    type: count
+  }
+
+  measure: count_registered_marks {
+    type: count
+    filters: {
+      field: case_file.registration_dt_date
+      value: "-NULL"
+    }
+  }
+
+  measure: total_registered_marks {
     type: sum
     drill_fields: [detail*]
     sql: ${registered_marks_tmp};;

@@ -17,9 +17,14 @@ view: correspondent_domrep_attorney {
     sql: REPLACE(REGEXP_EXTRACT(${attorney_name_remove_address}, r'[A-Z ]+'), 'ESQ', '') ;;
   }
 
-  dimension: filter_readable_attorney_name {
+  dimension: filter_empty_readable_attorney_name {
     type: yesno
-    sql: ${readable_attorney_name} = ''  ;;
+    sql: ${readable_attorney_name} != ' '  ;;
+  }
+
+  dimension: filter_single_char_names {
+    type: yesno
+    sql:  LENGTH(${readable_attorney_name}) > 2 ;;
   }
 
   dimension: attorney_no {

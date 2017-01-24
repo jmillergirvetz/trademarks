@@ -14,6 +14,11 @@ view: tm_class_codes_after1973 {
     sql: ${TABLE}.mark_class_title ;;
   }
 
+  dimension: mark_class_combined {
+    type: string
+    sql: CONCAT(${TABLE}.mark_class_title, "-", ${TABLE}.mark_class_code) ;;
+  }
+
   measure: count {
     type: count
     drill_fields: []
