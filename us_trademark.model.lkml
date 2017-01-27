@@ -62,14 +62,14 @@ explore: case_file {
     relationship: many_to_one
     sql_on: ${case_file.serial_no} = ${us_class.serial_no} ;;
   }
-  # derived tables for classification codes
+  # derived tables for classification codes and lat lng
   join: tm_class_codes_after1973 {
-    relationship: one_to_many
-    sql_on: ${tm_class_codes_after1973.mark_class_code} = ${classification.class_primary_cd} ;;
+    relationship: many_to_one
+    sql_on: ${classification.class_primary_cd} = ${tm_class_codes_after1973.mark_class_code} ;;
   }
   join: tm_class_codes_before1973 {
-    relationship: one_to_many
-    sql_on: ${tm_class_codes_before1973.mark_class_code_old} = ${classification.class_primary_cd};;
+    relationship: many_to_one
+    sql_on:  ${classification.class_primary_cd} = ${tm_class_codes_before1973.mark_class_code_old};;
   }
   join: lat_lng_world_cities {
     relationship: many_to_one
