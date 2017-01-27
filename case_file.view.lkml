@@ -454,6 +454,23 @@ view: case_file {
     }
   }
 
+  measure: count_classes_before1973 {
+    type: count
+    filters: {
+      field: tm_class_codes_before1973.mark_class_title_old
+      value: "-No Class"
+    }
+  }
+
+  measure: count_classes_after1973 {
+    type: count
+    filters: {
+      field: tm_class_codes_after1973.mark_class_title
+      value: "-No Class"
+    }
+  }
+
+
   dimension: misclassified_codes {
     type: yesno
     sql: ${classification.class_primary_cd} is null;;
