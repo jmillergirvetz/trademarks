@@ -11,7 +11,7 @@ view: tm_class_codes_after1973 {
 
   dimension: mark_class_title {
     type: string
-    sql: ${TABLE}.mark_class_title ;;
+    sql: IFNULL(${TABLE}.mark_class_title, 'No Class') ;;
   }
 
   dimension: mark_class_combined {

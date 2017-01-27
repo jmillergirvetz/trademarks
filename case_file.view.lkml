@@ -127,7 +127,7 @@ view: case_file {
 
   dimension: exm_attorney_name {
     type: string
-    sql: IFNULL(${TABLE}.exm_attorney_name, "NO ATTORNEY") ;;
+    sql: UPPER(IFNULL(${TABLE}.exm_attorney_name, "NO ATTORNEY")) ;;
   }
 
   dimension: exm_office_cd {
@@ -429,6 +429,11 @@ view: case_file {
       field: case_file.exm_attorney_name
       value: "-NO ATTORNEY"
     }
+  }
+
+  measure: distinct_exm_attorney_cnt {
+    type: count_distinct
+    sql: case_file.exm_attorney_name ;;
   }
 
   measure: reg_count {
