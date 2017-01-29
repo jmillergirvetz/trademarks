@@ -12,10 +12,20 @@ Certification mark  any word, name, symbol, device, or combination of the form
 
 Collective mark  a trademark or service mark used by a collective group or organization, such as associations, cooperatives, and unions, which indicates an individuals membership in that particular group
 
+**Trademark Timeline**
+<p></p>
+<p></p>
+![picture](https://raw.githubusercontent.com/jmillergirvetz/trademarks/dev-jonathon-miller-girvetz-cmzh/images/trademark_timeline.png)
+<p></p>
+<p></p>
+<center><a href="https://www.uspto.gov/trademark/trademark-timelines/section-1a-timeline-application-based-use-commerce" target="_blank">Trademark Timeline Reference</a></center>
+<p></p>
+<p></p>
 **Important Links**
 
 * [Variable Table](https://www.uspto.gov/sites/default/files/documents/vartable_2015.pdf)
 * [US Trademarks Schema](https://www.uspto.gov/sites/default/files/documents/case_files_schema_high_level_2015update.pdf)
+* [Trademark Timeline](https://www.uspto.gov/trademark/trademark-timelines/section-1a-timeline-application-based-use-commerce)
 
 
 **Trademark Renewal Sections**

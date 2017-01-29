@@ -446,6 +446,15 @@ view: case_file {
     }
   }
 
+  measure: abandoned_count {
+    label: "Abandoned Count"
+    type: count
+    filters: {
+      field: case_file.abandon_dt_date
+      value: "-NULL"
+    }
+  }
+
   measure: renew_count {
     label: "Renewal Count"
     type: count
