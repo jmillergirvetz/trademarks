@@ -71,4 +71,20 @@ view: foreign_app {
     type: count
     drill_fields: []
   }
+
+  measure: count_for_reg_date {
+    type: count
+    filters: {
+      field: foreign_app.for_registration_dt
+      value: "-NULL"
+    }
+  }
+
+  measure: count_for_reg_number {
+    type: count
+    filters: {
+      field: foreign_app.for_registration_no
+      value: "-NULL"
+    }
+  }
 }

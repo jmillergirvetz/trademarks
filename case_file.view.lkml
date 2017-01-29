@@ -329,6 +329,16 @@ view: case_file {
     sql: ${TABLE}.registration_no ;;
   }
 
+  dimension: registered_and_renewed {
+    type: yesno
+    sql: ${registration_dt_date} IS NOT NULL AND ${renewal_dt_date} IS NOT NULL ;;
+  }
+
+  dimension: not_registered_and_renewed {
+    type: yesno
+    sql: ${registration_dt_date} IS NULL AND ${renewal_dt_date} IS NOT NULL ;;
+  }
+
   dimension: related_other_in {
     type: string
     sql: ${TABLE}.related_other_in ;;
@@ -340,9 +350,15 @@ view: case_file {
     sql: CAST(${TABLE}.renewal_dt as timestamp) ;;
   }
 
-  dimension: renewal_file_in {
+  dimension: renewal_file_in_original {
+    hidden: yes
     type: string
     sql: ${TABLE}.renewal_file_in ;;
+  }
+
+  dimension: renewal_file_in_ {
+    type: yesno
+    sql: ${renewal_file_in_original} = '1' ;;
   }
 
   dimension: repub_12c_dt {
@@ -434,7 +450,7 @@ view: case_file {
 
   measure: distinct_exm_attorney_cnt {
     type: count_distinct
-    sql: case_file.exm_attorney_name ;;
+    sql: ${exm_attorney_name} ;;
   }
 
   measure: reg_count {
@@ -442,6 +458,15 @@ view: case_file {
     type: count
     filters: {
       field: case_file.registration_dt_date
+      value: "-NULL"
+    }
+  }
+
+  measure: reg_count_num {
+    label: "Registration Number Count"
+    type: count
+    filters: {
+      field: case_file.registration_no
       value: "-NULL"
     }
   }
@@ -461,6 +486,14 @@ view: case_file {
     filters: {
       field: case_file.renewal_dt_date
       value: "-NULL"
+    }
+  }
+
+  measure: filed_renewal_count {
+    type: count
+    filters: {
+      field: case_file.renewal_file_in_
+      value: "Yes"
     }
   }
 
