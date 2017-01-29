@@ -334,7 +334,7 @@ view: case_file {
     sql: ${registration_dt_date} IS NOT NULL AND ${renewal_dt_date} IS NOT NULL ;;
   }
 
-  dimension: not_registered_and_renewed {
+  dimension: not_registered_but_renewed {
     type: yesno
     sql: ${registration_dt_date} IS NULL AND ${renewal_dt_date} IS NOT NULL ;;
   }
@@ -493,6 +493,22 @@ view: case_file {
     type: count
     filters: {
       field: case_file.renewal_file_in_
+      value: "Yes"
+    }
+  }
+
+  measure: registered_and_renewed_count {
+    type: count
+    filters: {
+      field: case_file.registered_and_renewed
+      value: "Yes"
+    }
+  }
+
+  measure: not_registered_but_renewed_count {
+    type: count
+    filters: {
+      field: case_file.not_registered_but_renewed
       value: "Yes"
     }
   }
