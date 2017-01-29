@@ -12,7 +12,7 @@ view: tm_class_codes_after1973 {
   dimension: mark_class_title {
     type: string
     sql: IFNULL(${TABLE}.mark_class_title, 'No Class') ;;
-    html: <a href="/dashboards/793?Class_Name={{value}}">{{value}}</a> ;;
+    html: <a href="/dashboards/793?ClassName={{linked_value}}" target="_blank">{{linked_value}}</a> ;;
   }
 
   dimension: mark_class_combined {

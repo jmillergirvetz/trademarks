@@ -114,6 +114,7 @@ view: owner {
               WHEN ${TABLE}.own_name LIKE '%Sara Lee%' OR ${TABLE}.own_name LIKE '%SARA LEE%' THEN 'Sara Lee Corp.'
               ELSE ${TABLE}.own_name
               END) ;;
+    html: <a href="/dashboards/789?OwnerName={{linked_value}}" target="_blank">{{linked_value}}</a> ;;
   }
 
 # can't return table value within else so need to use case statemenet like above
@@ -230,6 +231,7 @@ view: owner {
       field: own_name_
       value: "-NULL"
     }
+    drill_fields: [own_name_, own_altn_name, own_addr_1, own_addr_2, total_tm_with_owner]
   }
 
   measure: total_tm_with_owner {

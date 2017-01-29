@@ -3,6 +3,7 @@ view: case_file {
 
   dimension_group: abandon_dt {
     type: time
+    timeframes: [date, year, month, week, day_of_month]
     sql: cast(${TABLE}.abandon_dt as timestamp) ;;
   }
 
