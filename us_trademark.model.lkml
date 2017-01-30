@@ -3,11 +3,6 @@ connection: "bigquery_publicdata_standard_sql"
 include: "*.view.lkml"         # include all views in this project
 include: "*.dashboard.lookml"  # include all dashboards in this project
 
-## map layers
-map_layer: world_cities {
-  url: "https://cdn.rawgit.com/jmillergirvetz/b6c01ff65fdeac80def975c6be53a363/raw/94e65018b0f83e878546704a5b1197d24e45b8c5/world_cities_topo.json"
-}
-
 ## base explore
 explore: case_file {
   join: attorney_assigned_marks {

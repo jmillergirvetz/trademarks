@@ -13,7 +13,7 @@ view: owner {
   }
 
   dimension: own_addr_city {
-    map_layer_name: world_cities
+    type: string
     sql: UPPER(${TABLE}.own_addr_city) ;;
   }
 
@@ -114,7 +114,8 @@ view: owner {
               WHEN ${TABLE}.own_name LIKE '%Sara Lee%' OR ${TABLE}.own_name LIKE '%SARA LEE%' THEN 'Sara Lee Corp.'
               ELSE ${TABLE}.own_name
               END) ;;
-    html: <a href="/dashboards/789?OwnerName={{linked_value}}" target="_blank">{{linked_value}}</a> ;;
+    #html: <a href="/dashboards/789?OwnerName={{linked_value}}" target="_blank">{{linked_value}}</a> ;;
+
   }
 
 # can't return table value within else so need to use case statemenet like above

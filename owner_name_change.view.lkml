@@ -12,6 +12,7 @@ view: owner_name_change {
   }
 
   dimension: serial_no {
+    primary_key: yes
     type: string
     sql: ${TABLE}.serial_no ;;
   }
