@@ -417,6 +417,11 @@ view: case_file {
     sql: ${TABLE}.use_afdv_par_acc_in ;;
   }
 
+  dimension: misclassified_codes {
+    type: yesno
+    sql: ${classification.class_primary_cd} is null;;
+  }
+
   measure: count {
     type: count
     drill_fields: []
@@ -434,7 +439,25 @@ view: case_file {
     label: "IR Count"
     type: count
     filters: {
-      field: case_file.ir_registration_no
+      field: case_file.ir_registration_dt_date
+      value: "-NULL"
+    }
+  }
+
+  measure: ir_registration_count {
+    label: "IR Registration Count"
+    type: count
+    filters: {
+      field: case_file.ir_registration_dt_date
+      value: "-NULL"
+    }
+  }
+
+  measure: ir_renewal_count {
+    label: "IR Renewal Count"
+    type: count
+    filters: {
+      field: case_file.ir_renewal_dt_date
       value: "-NULL"
     }
   }
@@ -513,11 +536,6 @@ view: case_file {
       field: case_file.not_registered_but_renewed
       value: "Yes"
     }
-  }
-
-  dimension: misclassified_codes {
-    type: yesno
-    sql: ${classification.class_primary_cd} is null;;
   }
 
   measure: sum_mark {

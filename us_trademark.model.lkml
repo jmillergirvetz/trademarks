@@ -3,7 +3,7 @@ connection: "bigquery_publicdata_standard_sql"
 include: "*.view.lkml"         # include all views in this project
 include: "*.dashboard.lookml"  # include all dashboards in this project
 
-## base explore
+## base case file explore
 explore: case_file {
   join: attorney_assigned_marks {
     relationship: many_to_many
@@ -74,7 +74,7 @@ explore: case_file {
   }
 }
 
-## additional explores
+## assignment explore
 explore: tm_assignment {
   label: "TM Assignment"
   join: tm_assignee {

@@ -80,40 +80,41 @@ view: owner {
   dimension: own_name {
     hidden: yes
     type: string
-    sql: ${TABLE}.own_name ;;
+    sql: UPPER(${TABLE}.own_name) ;;
   }
+
 
   dimension: own_name_ {
     type: string
-    sql: UPPER(CASE WHEN ${TABLE}.own_name LIKE '%Mattel%' OR ${TABLE}.own_name LIKE '%MATTEL%' THEN "Mattel, Inc."
-              WHEN ${TABLE}.own_name LIKE '%Disney%' OR ${TABLE}.own_name LIKE '%DISNEY%' THEN 'Disney Enterprises, Inc.'
+    sql: REGEXP_EXTRACT(CASE WHEN ${TABLE}.own_name LIKE '%Mattel%' OR ${TABLE}.own_name LIKE '%MATTEL%' THEN "MATTEL INC"
+              WHEN ${TABLE}.own_name LIKE '%Disney%' OR ${TABLE}.own_name LIKE '%DISNEY%' THEN 'DISNEY ENTERPRISES INC'
               WHEN ${TABLE}.own_name LIKE '%Apple %' OR ${TABLE}.own_name LIKE '%APPLE %'
-                OR ${TABLE}.own_name LIKE '%Apple,%' OR ${TABLE}.own_name LIKE '%APPLE,%'THEN 'Apple, Inc.'
-              WHEN ${TABLE}.own_name LIKE '%Hasbro%' OR ${TABLE}.own_name LIKE '%HASBRO%' THEN 'Hasbro, Inc.'
+                OR ${TABLE}.own_name LIKE '%Apple,%' OR ${TABLE}.own_name LIKE '%APPLE,%'THEN 'APPLE INC'
+              WHEN ${TABLE}.own_name LIKE '%Hasbro%' OR ${TABLE}.own_name LIKE '%HASBRO%' THEN 'HASBRO INC'
               WHEN ${TABLE}.own_name LIKE '%Johnson & Johnson%' OR ${TABLE}.own_name LIKE '%JOHNSON & JOHNSON%'
                 OR ${TABLE}.own_name LIKE '%Johnson and Johnson%' OR ${TABLE}.own_name LIKE '%JOHNSON and JOHNSON%'
-                THEN 'Johnson & Johnson'
-              WHEN ${TABLE}.own_name LIKE '%Novartis%' OR ${TABLE}.own_name LIKE '%NOVARTIS%' THEN 'Novartis'
-              WHEN ${TABLE}.own_name LIKE '%Viacom%' OR ${TABLE}.own_name LIKE '%VIACOM%' THEN 'Viacom'
-              WHEN ${TABLE}.own_name LIKE '%Microsoft%' OR ${TABLE}.own_name LIKE '%MICROSOFT%' THEN 'Microsoft Corp.'
+                THEN 'JOHNSON & JOHNSON'
+              WHEN ${TABLE}.own_name LIKE '%Novartis%' OR ${TABLE}.own_name LIKE '%NOVARTIS%' THEN 'NOVARTIS'
+              WHEN ${TABLE}.own_name LIKE '%Viacom%' OR ${TABLE}.own_name LIKE '%VIACOM%' THEN 'VIACOM'
+              WHEN ${TABLE}.own_name LIKE '%Microsoft%' OR ${TABLE}.own_name LIKE '%MICROSOFT%' THEN 'MICROSOFT CORP'
               WHEN ${TABLE}.own_name LIKE '%Intel %' OR ${TABLE}.own_name LIKE '%INTEL %'
-                OR ${TABLE}.own_name LIKE '%Intel,%' OR ${TABLE}.own_name LIKE '%INTEL,%'THEN 'Intel'
+                OR ${TABLE}.own_name LIKE '%Intel,%' OR ${TABLE}.own_name LIKE '%INTEL,%'THEN 'INTEL'
               WHEN ${TABLE}.own_name LIKE '%Ibm%' OR ${TABLE}.own_name LIKE '%IBM%' OR ${TABLE}.own_name LIKE '%ibm%'
                 OR ${TABLE}.own_name LIKE '%International Business Machines%'
                 OR ${TABLE}.own_name LIKE '%INTERNATIONAL BUSINESS MACHINES%'
                 THEN 'IBM'
-              WHEN ${TABLE}.own_name LIKE '%Cisco%' OR ${TABLE}.own_name LIKE '%CISCO%' THEN 'Cisco Systems'
-              WHEN ${TABLE}.own_name LIKE '%Oracle%' OR ${TABLE}.own_name LIKE '%ORACLE%' THEN 'Orcale Corp.'
+              WHEN ${TABLE}.own_name LIKE '%Cisco%' OR ${TABLE}.own_name LIKE '%CISCO%' THEN 'CISCO SYSTEMS'
+              WHEN ${TABLE}.own_name LIKE '%Oracle%' OR ${TABLE}.own_name LIKE '%ORACLE%' THEN 'ORACLE CORP'
               WHEN ${TABLE}.own_name LIKE '%Pfizer %' OR ${TABLE}.own_name LIKE '%PFIZER %'
-                OR ${TABLE}.own_name LIKE '%Pfizer,%' OR ${TABLE}.own_name LIKE '%PFIZER,%'THEN 'Pfizer, Inc.'
+                OR ${TABLE}.own_name LIKE '%Pfizer,%' OR ${TABLE}.own_name LIKE '%PFIZER,%'THEN 'PFIZER INC'
               WHEN ${TABLE}.own_name LIKE '%Ford Motor Company%' OR ${TABLE}.own_name LIKE '%FORD MOTOR COMPANY%'
-                THEN 'Ford Motor Company'
-              WHEN ${TABLE}.own_name LIKE "%L'Oreal%" OR ${TABLE}.own_name LIKE "%L'OREAL%" THEN "L'Oreal"
-              WHEN ${TABLE}.own_name LIKE '%Nestle%' OR ${TABLE}.own_name LIKE '%NESTLE%' THEN 'Nestle'
-              WHEN ${TABLE}.own_name LIKE '%Anheuser-Busch%' OR ${TABLE}.own_name LIKE '%ABHEUSER-BUSCH%' THEN 'Anheuser-Busch, Inc.'
-              WHEN ${TABLE}.own_name LIKE '%Sara Lee%' OR ${TABLE}.own_name LIKE '%SARA LEE%' THEN 'Sara Lee Corp.'
+                THEN 'FORD MOTOR COMPANY'
+              WHEN ${TABLE}.own_name LIKE "%L'Oreal%" OR ${TABLE}.own_name LIKE "%L'OREAL%" THEN "L'OREAL"
+              WHEN ${TABLE}.own_name LIKE '%Nestle%' OR ${TABLE}.own_name LIKE '%NESTLE%' THEN 'NESTLE'
+              WHEN ${TABLE}.own_name LIKE '%Anheuser-Busch%' OR ${TABLE}.own_name LIKE '%ANHEUSER-BUSCH%' THEN 'Anheuser-Busch, Inc.'
+              WHEN ${TABLE}.own_name LIKE '%Sara Lee%' OR ${TABLE}.own_name LIKE '%SARA LEE%' THEN 'SARA LEE CORP'
               ELSE ${TABLE}.own_name
-              END) ;;
+              END, r'[A-Z0-9\- ]+') ;;
     #html: <a href="/dashboards/789?OwnerName={{linked_value}}" target="_blank">{{linked_value}}</a> ;;
 
   }
