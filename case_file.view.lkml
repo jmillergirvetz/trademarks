@@ -586,4 +586,10 @@ view: case_file {
     list_field: case_file.exm_attorney_name
   }
 
+  measure: list_mark_id_char {
+    label: "List of Trademarks"
+    type: list
+    list_field: case_file.mark_id_char
+  }
+
 }
