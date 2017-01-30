@@ -422,6 +422,11 @@ view: case_file {
     sql: ${classification.class_primary_cd} is null;;
   }
 
+  dimension: for_ir_reg_overlap {
+    type: yesno
+    sql: ${foreign_app.for_registration_dt_date} IS NOT NULL AND ${ir_registration_dt_date} IS NOT NULL;;
+  }
+
   measure: count {
     type: count
     drill_fields: []
@@ -459,6 +464,14 @@ view: case_file {
     filters: {
       field: case_file.ir_renewal_dt_date
       value: "-NULL"
+    }
+  }
+
+  measure: for_ir_reg_overlap_count {
+    type: count
+    filters: {
+      field: case_file.for_ir_reg_overlap
+      value: "Yes"
     }
   }
 

@@ -14,7 +14,7 @@ view: correspondent_domrep_attorney {
 
   dimension: readable_attorney_name {
     type: string
-    sql: REPLACE(REGEXP_EXTRACT(${attorney_name_remove_address}, r'[A-Z ]+'), 'ESQ', '') ;;
+    sql: IFNULL(REPLACE(REGEXP_EXTRACT(${attorney_name_remove_address}, r'[A-Z ]+'), 'ESQ', ''), "NO ATTORNEY") ;;
   }
 
   dimension: filter_empty_readable_attorney_name {
