@@ -463,6 +463,7 @@ view: case_file {
   }
 
   measure: reg_count_num {
+    hidden: yes
     label: "Registration Number Count"
     type: count
     filters: {
@@ -490,6 +491,7 @@ view: case_file {
   }
 
   measure: filed_renewal_count {
+    hidden: yes
     type: count
     filters: {
       field: case_file.renewal_file_in_

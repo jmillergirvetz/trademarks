@@ -31,8 +31,9 @@ view: foreign_app {
     sql: ${TABLE}.for_appl_seq ;;
   }
 
-  dimension: for_registration_dt {
-    type: string
+  dimension_group: for_registration_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
     sql: ${TABLE}.for_registration_dt ;;
   }
 
@@ -46,8 +47,9 @@ view: foreign_app {
     sql: ${TABLE}.for_registration_no ;;
   }
 
-  dimension: for_renewal_dt {
-    type: string
+  dimension_group: for_renewal_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
     sql: ${TABLE}.for_renewal_dt ;;
   }
 
@@ -73,17 +75,19 @@ view: foreign_app {
   }
 
   measure: count_for_reg_date {
+    label: "Foreign Registration Count"
     type: count
     filters: {
-      field: foreign_app.for_registration_dt
+      field: foreign_app.for_registration_dt_date
       value: "-NULL"
     }
   }
 
-  measure: count_for_reg_number {
+  measure: count_for_ren_number {
+    label: "Foreign Renewal Count"
     type: count
     filters: {
-      field: foreign_app.for_registration_no
+      field: foreign_app.for_renewal_dt_date
       value: "-NULL"
     }
   }
