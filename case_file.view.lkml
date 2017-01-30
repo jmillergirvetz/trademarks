@@ -419,7 +419,7 @@ view: case_file {
 
   measure: count {
     type: count
-    drill_fields: [exm_attorney_name]
+    drill_fields: []
   }
 
   measure: us_count {
@@ -547,6 +547,12 @@ view: case_file {
   measure: sum_coll_mem_mark {
     type: sum
     sql: ${coll_memb_mark_in} ;;
+  }
+
+  measure: list_exm_attorneys {
+    label: "List of Exam Attorneys"
+    type: list
+    list_field: case_file.exm_attorney_name
   }
 
 }

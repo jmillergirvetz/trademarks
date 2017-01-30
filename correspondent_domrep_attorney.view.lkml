@@ -95,4 +95,10 @@ view: correspondent_domrep_attorney {
     }
   }
 
+  measure: list_corr_attorneys {
+    label: "List of Correspondent Attorneys"
+    type: list
+    list_field: correspondent_domrep_attorney.readable_attorney_name
+  }
+
 }
