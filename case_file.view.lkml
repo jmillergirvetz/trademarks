@@ -310,19 +310,26 @@ view: case_file {
 
   dimension: mark_id_char {
     type: string
-    sql: ${TABLE}.mark_id_char ;;
+    sql: IFNULL(${TABLE}.mark_id_char, "no trademark") ;;
   }
 
   dimension: mark_id_char_reg_yesno {
-    hidden: yes
+    hidden: no
     type: string
-    sql: CASE WHEN ${mark_id_char} IS NOT NULL AND ${registration_dt_date} IS NOT NULL THEN "1" ELSE "0" END ;;
+    case: {
+      when: {
+        label: "(1)"
+        sql: ${TABLE}.registration_dt IS NOT NULL ;;
+      }
+      else: "(0)"
+    }
   }
 
   dimension: mark_id_char_reg {
-    label: "Trademark with Registered or Not Combined"
+    label: "Trademark with Registered or Not"
+    description: "Registered Trademarks With (1) or Without (0) Mark"
     type: string
-    sql: CONCAT(${mark_id_char}, " - ", ${mark_id_char_reg_yesno}) ;;
+    sql: CONCAT(${mark_id_char}, " ", ${mark_id_char_reg_yesno}) ;;
   }
 
   dimension: opposit_pend_in {
@@ -543,16 +550,7 @@ view: case_file {
   dimension: abandon_dt_date_data {
     hidden: yes
     type: yesno
-    sql: ${abandon_dt_date} IS NOT NULL;;
-  }
-
-  measure: abandoned_count {
-    label: "Abandoned Count"
-    type: count
-    filters: {
-      field: case_file.abandon_dt_date_data
-      value: "-NULL"
-    }
+    sql: ${abandon_dt_date} IS NOT NULL ;;
   }
 
   measure: renew_count {
