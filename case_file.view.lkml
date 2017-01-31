@@ -7,6 +7,12 @@ view: case_file {
     sql: cast(${TABLE}.abandon_dt as timestamp) ;;
   }
 
+  dimension: date_as_string {
+    hidden: yes
+    type: string
+    sql: cast(${TABLE}.abandon_dt as varchar) ;;
+  }
+
   dimension: acq_dist_in {
     type: string
     sql: ${TABLE}.acq_dist_in ;;
@@ -41,9 +47,10 @@ view: case_file {
     sql: ${TABLE}.amend_principal_in ;;
   }
 
-  dimension: amend_reg_dt {
-    type: string
-    sql: ${TABLE}.amend_reg_dt ;;
+  dimension_group: amend_reg_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
+    sql: CAST(${TABLE}.amend_reg_dt AS timestamp) ;;
   }
 
   dimension: amend_supp_reg_in {
@@ -66,9 +73,10 @@ view: case_file {
     sql: ${TABLE}.cfh_status_cd ;;
   }
 
-  dimension: cfh_status_dt {
-    type: string
-    sql: ${TABLE}.cfh_status_dt ;;
+  dimension_group: cfh_status_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
+    sql: CAST(${TABLE}.cfh_status_dt AS timestamp);;
   }
 
   dimension: chg_reg_in {
@@ -141,14 +149,16 @@ view: case_file {
     sql: ${TABLE}.file_location ;;
   }
 
-  dimension: file_location_dt {
-    type: string
-    sql: ${TABLE}.file_location_dt ;;
+  dimension_group: file_location_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
+    sql: CAST(${TABLE}.file_location_dt AS timestamp);;
   }
 
-  dimension: filing_dt {
-    type: string
-    sql: ${TABLE}.filing_dt ;;
+  dimension_group: filing_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
+    sql: CAST(${TABLE}.filing_dt AS timestamp) ;;
   }
 
   dimension: for_priority_in {
@@ -171,14 +181,16 @@ view: case_file {
     sql: ${TABLE}.interfer_pend_in ;;
   }
 
-  dimension: ir_auto_reg_dt {
-    type: string
-    sql: ${TABLE}.ir_auto_reg_dt ;;
+  dimension_group: ir_auto_reg_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
+    sql: CAST(${TABLE}.ir_auto_reg_dt AS timestamp);;
   }
 
-  dimension: ir_death_dt {
-    type: string
-    sql: ${TABLE}.ir_death_dt ;;
+  dimension_group: ir_death_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
+    sql: CAST(${TABLE}.ir_death_dt AS timestamp) ;;
   }
 
   dimension: ir_first_refus_in {
@@ -186,9 +198,10 @@ view: case_file {
     sql: ${TABLE}.ir_first_refus_in ;;
   }
 
-  dimension: ir_priority_dt {
-    type: string
-    sql: ${TABLE}.ir_priority_dt ;;
+  dimension_group: ir_priority_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
+    sql: CAST(${TABLE}.ir_priority_dt AS timestamp) ;;
   }
 
   dimension: ir_priority_in {
@@ -196,9 +209,10 @@ view: case_file {
     sql: ${TABLE}.ir_priority_in ;;
   }
 
-  dimension: ir_publication_dt {
-    type: string
-    sql: ${TABLE}.ir_publication_dt ;;
+  dimension_group: ir_publication_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
+    sql: CAST(${TABLE}.ir_publication_dt AS timestamp);;
   }
 
   dimension_group: ir_registration_dt {
@@ -223,9 +237,10 @@ view: case_file {
     sql: ${TABLE}.ir_status_cd ;;
   }
 
-  dimension: ir_status_dt {
-    type: string
-    sql: ${TABLE}.ir_status_dt ;;
+  dimension_group: ir_status_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
+    sql: CAST(${TABLE}.ir_status_dt AS timestamp);;
   }
 
   dimension: lb_for_app_cur_in {
@@ -298,14 +313,27 @@ view: case_file {
     sql: ${TABLE}.mark_id_char ;;
   }
 
+  dimension: mark_id_char_reg_yesno {
+    hidden: yes
+    type: string
+    sql: CASE WHEN ${mark_id_char} IS NOT NULL AND ${registration_dt_date} IS NOT NULL THEN "1" ELSE "0" END ;;
+  }
+
+  dimension: mark_id_char_reg {
+    label: "Trademark with Registered or Not Combined"
+    type: string
+    sql: CONCAT(${mark_id_char}, " - ", ${mark_id_char_reg_yesno}) ;;
+  }
+
   dimension: opposit_pend_in {
     type: string
     sql: ${TABLE}.opposit_pend_in ;;
   }
 
-  dimension: publication_dt {
-    type: string
-    sql: ${TABLE}.publication_dt ;;
+  dimension_group: publication_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
+    sql: CAST(${TABLE}.publication_dt AS timestamp) ;;
   }
 
   dimension: reg_cancel_cd {
@@ -313,9 +341,10 @@ view: case_file {
     sql: ${TABLE}.reg_cancel_cd ;;
   }
 
-  dimension: reg_cancel_dt {
-    type: string
-    sql: ${TABLE}.reg_cancel_dt ;;
+  dimension_group: reg_cancel_dt {
+    type: time
+    timeframes: [date, year, month, week, day_of_month]
+    sql: CAST(${TABLE}.reg_cancel_dt AS timestamp);;
   }
 
   dimension_group: registration_dt {
@@ -419,7 +448,7 @@ view: case_file {
 
   dimension: misclassified_codes {
     type: yesno
-    sql: ${classification.class_primary_cd} is null;;
+    sql: ${classification.class_primary_cd} IS NULL;;
   }
 
   dimension: for_ir_reg_overlap {
@@ -429,7 +458,10 @@ view: case_file {
 
   measure: count {
     type: count
-    drill_fields: []
+    filters: {
+      field: case_file.filing_dt_date
+      value: "-NULL"
+    }
   }
 
   measure: us_count {
@@ -508,11 +540,17 @@ view: case_file {
     }
   }
 
+  dimension: abandon_dt_date_data {
+    hidden: yes
+    type: yesno
+    sql: ${abandon_dt_date} IS NOT NULL;;
+  }
+
   measure: abandoned_count {
     label: "Abandoned Count"
     type: count
     filters: {
-      field: case_file.abandon_dt_date
+      field: case_file.abandon_dt_date_data
       value: "-NULL"
     }
   }
@@ -548,6 +586,14 @@ view: case_file {
     filters: {
       field: case_file.not_registered_but_renewed
       value: "Yes"
+    }
+  }
+
+  measure: mark_id_char_count{
+    type: count
+    filters: {
+      field: case_file.mark_id_char_reg_yesno
+      value: "1"
     }
   }
 
@@ -589,7 +635,7 @@ view: case_file {
   measure: list_mark_id_char {
     label: "List of Trademarks"
     type: list
-    list_field: case_file.mark_id_char
+    list_field: case_file.mark_id_char_reg
   }
 
 }
