@@ -83,7 +83,6 @@ view: owner {
     sql: UPPER(${TABLE}.own_name) ;;
   }
 
-
   dimension: own_name_ {
     type: string
     sql: REGEXP_EXTRACT(CASE WHEN ${TABLE}.own_name LIKE '%Mattel%' OR ${TABLE}.own_name LIKE '%MATTEL%' THEN "MATTEL INC"
@@ -115,8 +114,6 @@ view: owner {
               WHEN ${TABLE}.own_name LIKE '%Sara Lee%' OR ${TABLE}.own_name LIKE '%SARA LEE%' THEN 'SARA LEE CORP'
               ELSE ${TABLE}.own_name
               END, r'[A-Z0-9\- ]+') ;;
-    #html: <a href="/dashboards/789?OwnerName={{linked_value}}" target="_blank">{{linked_value}}</a> ;;
-
   }
 
 # can't return table value within else so need to use case statemenet like above
@@ -204,6 +201,11 @@ view: owner {
 # #   }
 # #   }
 
+  dimension: own_name_na {
+    type: string
+    sql: CASE WHEN ${own_name_} IS NULL THEN 'N/A' ELSE ${own_name_} END ;;
+  }
+
   dimension: own_seq {
     type: string
     sql: ${TABLE}.own_seq ;;
@@ -259,6 +261,11 @@ view: owner {
   measure: list_tm_class_codes_aftr_1973 {
     type: list
     list_field: tm_class_codes_after1973.mark_class_title
+  }
+
+  measure: list_owner_names {
+    type: list
+    list_field: owner.own_name_
   }
 
 }

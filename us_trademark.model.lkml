@@ -43,10 +43,10 @@ explore: case_file {
     sql_on: ${case_file.serial_no} = ${owner.serial_no} ;;
   }
   # aliased table showing attorneys who are also trademark owners
-  join: attorney_owners {
+  join: exam_attorney_owners {
     from: owner
     relationship: many_to_many
-    sql_on: ${case_file.exm_attorney_name} = ${attorney_owners.own_name_} ;;
+    sql_on: ${case_file.exm_attorney_name_orig} = ${exam_attorney_owners.own_name} ;;
   }
   join: prior_mark {
     relationship: many_to_one

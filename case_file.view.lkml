@@ -1,4 +1,5 @@
 view: case_file {
+
   sql_table_name: trademark.case_file ;;
 
   dimension_group: abandon_dt {
@@ -134,9 +135,15 @@ view: case_file {
     sql: ${TABLE}.draw_color_file_in ;;
   }
 
+  dimension: exm_attorney_name_orig {
+    hidden: no
+    type: string
+    sql: UPPER(${TABLE}.exm_attorney_name) ;;
+  }
+
   dimension: exm_attorney_name {
     type: string
-    sql: UPPER(IFNULL(${TABLE}.exm_attorney_name, "NO ATTORNEY")) ;;
+    sql: IFNULL(REGEXP_EXTRACT(${TABLE}.exm_attorney_name, r'[A-Z0-9\- ]+'), "NO ATTORNEY") ;;
   }
 
   dimension: exm_office_cd {
@@ -360,6 +367,11 @@ view: case_file {
     sql: cast(${TABLE}.registration_dt as timestamp) ;;
   }
 
+  dimension: registration_yesno {
+    type: yesno
+    sql: ${registration_dt_date} IS NOT NULL ;;
+  }
+
   dimension: registration_no {
     type: string
     sql: ${TABLE}.registration_no ;;
@@ -384,6 +396,11 @@ view: case_file {
     type: time
     timeframes: [date, year, month, day_of_year]
     sql: CAST(${TABLE}.renewal_dt as timestamp) ;;
+  }
+
+  dimension: renewal_yesno {
+    type: yesno
+    sql: ${renewal_dt_date} IS NOT NULL  ;;
   }
 
   dimension: renewal_file_in_original {
@@ -469,6 +486,7 @@ view: case_file {
       field: case_file.filing_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set*]
   }
 
   measure: us_count {
@@ -478,6 +496,7 @@ view: case_file {
       field: case_file.registration_no
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set*]
   }
   measure: ir_count {
     label: "IR Count"
@@ -486,6 +505,7 @@ view: case_file {
       field: case_file.ir_registration_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set*]
   }
 
   measure: ir_registration_count {
@@ -495,6 +515,7 @@ view: case_file {
       field: case_file.ir_registration_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set*]
   }
 
   measure: ir_renewal_count {
@@ -504,6 +525,7 @@ view: case_file {
       field: case_file.ir_renewal_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set*]
   }
 
   measure: for_ir_reg_overlap_count {
@@ -535,6 +557,7 @@ view: case_file {
       field: case_file.registration_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set*]
   }
 
   measure: reg_count_num {
@@ -560,6 +583,7 @@ view: case_file {
       field: case_file.renewal_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set*]
   }
 
   measure: filed_renewal_count {
@@ -636,4 +660,21 @@ view: case_file {
     list_field: case_file.mark_id_char_reg
   }
 
+  measure: list_owners {
+    label: "List of Owners"
+    type: list
+    list_field: owner.own_name_
+  }
+
+set: base_view_drill_set {
+  fields: [case_file.serial_no,
+           owner.own_name_na,
+           correspondent_domrep_attorney.readable_attorney_name,
+           case_file.exm_attorney_name,
+           case_file.mark_id_char_reg,
+           tm_class_codes_after1973.mark_class_title,
+           case_file.registration_yesno,
+           case_file.renewal_yesno
+          ]
+}
 }
