@@ -486,7 +486,7 @@ view: case_file {
       field: case_file.filing_dt_date
       value: "-NULL"
     }
-    drill_fields: [base_view_drill_set*]
+    drill_fields: [base_view_drill_set_count*]
   }
 
   measure: us_count {
@@ -496,7 +496,7 @@ view: case_file {
       field: case_file.registration_no
       value: "-NULL"
     }
-    drill_fields: [base_view_drill_set*]
+    drill_fields: [base_view_drill_set_count*]
   }
   measure: ir_count {
     label: "IR Count"
@@ -505,7 +505,7 @@ view: case_file {
       field: case_file.ir_registration_dt_date
       value: "-NULL"
     }
-    drill_fields: [base_view_drill_set*]
+    drill_fields: [base_view_drill_set_count*]
   }
 
   measure: ir_registration_count {
@@ -515,7 +515,7 @@ view: case_file {
       field: case_file.ir_registration_dt_date
       value: "-NULL"
     }
-    drill_fields: [base_view_drill_set*]
+    drill_fields: [base_view_drill_set_reg_count*]
   }
 
   measure: ir_renewal_count {
@@ -525,7 +525,7 @@ view: case_file {
       field: case_file.ir_renewal_dt_date
       value: "-NULL"
     }
-    drill_fields: [base_view_drill_set*]
+    drill_fields: [base_view_drill_set_renew_count*]
   }
 
   measure: for_ir_reg_overlap_count {
@@ -557,7 +557,7 @@ view: case_file {
       field: case_file.registration_dt_date
       value: "-NULL"
     }
-    drill_fields: [base_view_drill_set*]
+    drill_fields: [base_view_drill_set_reg_count*]
   }
 
   measure: reg_count_num {
@@ -583,7 +583,7 @@ view: case_file {
       field: case_file.renewal_dt_date
       value: "-NULL"
     }
-    drill_fields: [base_view_drill_set*]
+    drill_fields: [base_view_drill_set_renew_count*]
   }
 
   measure: filed_renewal_count {
@@ -593,6 +593,7 @@ view: case_file {
       field: case_file.renewal_file_in_
       value: "Yes"
     }
+    drill_fields: [base_view_drill_set_renew_count*]
   }
 
   measure: registered_and_renewed_count {
@@ -666,15 +667,24 @@ view: case_file {
     list_field: owner.own_name_
   }
 
-set: base_view_drill_set {
-  fields: [case_file.serial_no,
-           owner.own_name_na,
-           correspondent_domrep_attorney.readable_attorney_name,
-           case_file.exm_attorney_name,
-           case_file.mark_id_char_reg,
-           tm_class_codes_after1973.mark_class_title,
-           case_file.registration_yesno,
-           case_file.renewal_yesno
-          ]
-}
+  set: base_view_drill_set_count {
+    fields: [owner.own_name_,
+            correspondent_domrep_attorney.readable_attorney_name,
+             case_file.exm_attorney_name,
+             case_file.count]
+    }
+
+  set: base_view_drill_set_reg_count {
+    fields: [owner.own_name_,
+            correspondent_domrep_attorney.readable_attorney_name,
+            case_file.exm_attorney_name,
+            case_file.reg_count]
+    }
+
+  set: base_view_drill_set_renew_count {
+    fields: [owner.own_name_,
+            correspondent_domrep_attorney.readable_attorney_name,
+            case_file.exm_attorney_name,
+            case_file.renew_count]
+  }
 }

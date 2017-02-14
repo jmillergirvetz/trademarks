@@ -202,8 +202,10 @@ view: owner {
 # #   }
 
   dimension: own_name_na {
+    label: "Owner Name"
     type: string
     sql: CASE WHEN ${own_name_} IS NULL THEN 'N/A' ELSE ${own_name_} END ;;
+
   }
 
   dimension: own_seq {
@@ -235,7 +237,7 @@ view: owner {
       field: own_name_
       value: "-NULL"
     }
-    drill_fields: [own_name_, own_altn_name, own_addr_1, own_addr_2, total_tm_with_owner]
+    drill_fields: [own_name_, own_addr_1, own_addr_2, total_tm_with_owner]
   }
 
   measure: total_tm_with_owner {
