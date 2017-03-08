@@ -480,6 +480,7 @@ view: case_file {
     sql: ${foreign_app.for_registration_dt_date} IS NOT NULL AND ${ir_registration_dt_date} IS NOT NULL;;
   }
 
+## measures ##
   measure: count {
     type: count
     filters: {
@@ -543,11 +544,13 @@ view: case_file {
       field: case_file.exm_attorney_name
       value: "-NO ATTORNEY"
     }
+    drill_fields: [exm_att_drill_set_count*]
   }
 
   measure: distinct_exm_attorney_cnt {
     type: count_distinct
     sql: ${exm_attorney_name} ;;
+    drill_fields: [exm_att_drill_set_count*]
   }
 
   measure: reg_count {
@@ -653,6 +656,7 @@ view: case_file {
     label: "List of Exam Attorneys"
     type: list
     list_field: case_file.exm_attorney_name
+    html: html: <a href="dashboards/788?ExamAttorneyName={{linked_value}}" target="_blank">{{linked_value}}</a> ;;
   }
 
   measure: list_mark_id_char {
@@ -665,6 +669,8 @@ view: case_file {
     label: "List of Owners"
     type: list
     list_field: owner.own_name_
+    html: <a href="/dashboards/789?OwnerName={{linked_value}}" target="_blank">{{linked_value}}</a> ;;
+
   }
 
   set: base_view_drill_set_count {
@@ -687,4 +693,12 @@ view: case_file {
             case_file.exm_attorney_name,
             case_file.renew_count]
   }
+
+  set: exm_att_drill_set_count {
+    fields: [case_file.exm_attorney_name,
+      case_file.count,
+      case_file.reg_count,
+      case_file.renew_count]
+  }
+
 }

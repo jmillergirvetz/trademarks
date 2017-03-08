@@ -1,6 +1,8 @@
 view: correspondent_domrep_attorney {
   sql_table_name: trademark.correspondent_domrep_attorney ;;
 
+## dimensions ##
+
   dimension: attorney_name_orig {
     type: string
     sql: UPPER(${TABLE}.attorney_name) ;;
@@ -68,6 +70,13 @@ view: correspondent_domrep_attorney {
     sql: ${TABLE}.serial_no ;;
   }
 
+  dimension: corr_att_own_add_1_2 {
+    type: yesno
+    sql: ${owner.own_addr_1} IS NOT NULL OR ${owner.own_addr_2} IS NOT NULL ;;
+  }
+
+## measures ##
+
   measure: count {
     type: count
     drill_fields: [attorney_name_orig, domestic_rep_name]
@@ -85,6 +94,7 @@ view: correspondent_domrep_attorney {
     label: "Total Distinct Corr Attorney"
     type: count_distinct
     sql: ${TABLE}.attorney_name ;;
+    drill_fields: [corr_att_drill_set_count*]
   }
 
   measure: count_null {
@@ -95,10 +105,27 @@ view: correspondent_domrep_attorney {
     }
   }
 
+  measure: distinct_test {
+    type: count
+    filters: {
+      field: correspondent_domrep_attorney.corr_att_own_add_1_2
+      value: "Yes"
+    }
+  }
+
   measure: list_corr_attorneys {
     label: "List of Correspondent Attorneys"
     type: list
     list_field: correspondent_domrep_attorney.readable_attorney_name
+  }
+
+## sets ##
+
+  set: corr_att_drill_set_count {
+    fields: [correspondent_domrep_attorney.readable_attorney_name,
+            case_file.count,
+            case_file.reg_count,
+            case_file.renew_count]
   }
 
 }

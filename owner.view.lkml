@@ -9,7 +9,7 @@ view: owner {
 
   dimension: own_addr_2 {
     type: string
-    sql: ${TABLE}.own_addr_2 ;;
+    sql: UPPER(${TABLE}.own_addr_2) ;;
   }
 
   dimension: own_addr_city {
@@ -85,7 +85,8 @@ view: owner {
 
   dimension: own_name_ {
     type: string
-    sql: REGEXP_EXTRACT(CASE WHEN ${TABLE}.own_name LIKE '%Mattel%' OR ${TABLE}.own_name LIKE '%MATTEL%' THEN "MATTEL INC"
+    sql:
+            UPPER(CASE WHEN ${TABLE}.own_name LIKE '%Mattel%' OR ${TABLE}.own_name LIKE '%MATTEL%' THEN "MATTEL INC"
               WHEN ${TABLE}.own_name LIKE '%Disney%' OR ${TABLE}.own_name LIKE '%DISNEY%' THEN 'DISNEY ENTERPRISES INC'
               WHEN ${TABLE}.own_name LIKE '%Apple %' OR ${TABLE}.own_name LIKE '%APPLE %'
                 OR ${TABLE}.own_name LIKE '%Apple,%' OR ${TABLE}.own_name LIKE '%APPLE,%'THEN 'APPLE INC'
@@ -113,7 +114,7 @@ view: owner {
               WHEN ${TABLE}.own_name LIKE '%Anheuser-Busch%' OR ${TABLE}.own_name LIKE '%ANHEUSER-BUSCH%' THEN 'Anheuser-Busch, Inc.'
               WHEN ${TABLE}.own_name LIKE '%Sara Lee%' OR ${TABLE}.own_name LIKE '%SARA LEE%' THEN 'SARA LEE CORP'
               ELSE ${TABLE}.own_name
-              END, r'[A-Z0-9\- ]+') ;;
+              END) ;; # REGEX_EXTRACT(my_string, r'[A-Z0-9\- ]+')
   }
 
 # can't return table value within else so need to use case statemenet like above
@@ -237,7 +238,7 @@ view: owner {
       field: own_name_
       value: "-NULL"
     }
-    drill_fields: [own_name_, own_addr_1, own_addr_2, total_tm_with_owner]
+    drill_fields: [owner_drill_set_count*]
   }
 
   measure: total_tm_with_owner {
@@ -248,7 +249,6 @@ view: owner {
 
   measure: count {
     type: count
-    drill_fields: [own_name, own_altn_name]
   }
 
   measure: count_serial_num {
@@ -268,6 +268,13 @@ view: owner {
   measure: list_owner_names {
     type: list
     list_field: owner.own_name_
+  }
+
+  set: owner_drill_set_count {
+    fields: [owner.own_name_,
+            case_file.count,
+            case_file.reg_count,
+            case_file.renew_count]
   }
 
 }
