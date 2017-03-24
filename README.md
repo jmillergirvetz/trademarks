@@ -12,6 +12,20 @@ Certification mark  any word, name, symbol, device, or combination of the form
 
 Collective mark  a trademark or service mark used by a collective group or organization, such as associations, cooperatives, and unions, which indicates an individuals membership in that particular group
 
+**Initial Trademark Questions**
+
+* Who dominates the trademark industry?
+  * Owners?
+  * Case Attorneys?
+  * Exam Attorneys?
+  * Classifications?
+* How have the amount of total amount, total registered and renewed trademarks changed overtime?
+* Where are the entities located and what is the filing location of the trademarks?
+* What is happening with trademark transfers?
+* What are the conversion rates of filedto registered trademarks from different entities?
+* Which attorneys are also owners?
+* Are there any outliers?
+
 **Trademark Timeline**
 <p></p>
 <p></p>
