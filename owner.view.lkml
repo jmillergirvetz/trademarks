@@ -32,6 +32,17 @@ view: owner {
     sql: IFNULL(${TABLE}.own_addr_postal, 'Not Available') ;;
   }
 
+  dimension: own_addr_postal_edit {
+    hidden: yes
+    map_layer_name: us_zipcode_tabulation_areas
+    sql: REGEXP_EXTRACT(IFNULL(${TABLE}.own_addr_postal, 'Not Available'), r'[0-9]+') ;;
+  }
+
+  dimension: own_addr_us_postal {
+    map_layer_name: us_zipcode_tabulation_areas
+    sql: CASE WHEN LENGTH(${own_addr_postal_edit}) = 5 THEN ${own_addr_postal_edit} ELSE NULL END ;;
+  }
+
   dimension: own_addr_state_cd {
     map_layer_name: us_states
     sql: ${TABLE}.own_addr_state_cd ;;
