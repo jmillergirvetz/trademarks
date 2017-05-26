@@ -5,6 +5,7 @@ include: "*.dashboard.lookml"  # include all dashboards in this project
 
 ## base case file explore
 explore: case_file {
+  hidden: yes
   join: attorney_assigned_marks {
     relationship: many_to_many
     sql_on: ${case_file.exm_attorney_name} = ${attorney_assigned_marks.attorney_name} ;;
@@ -76,6 +77,7 @@ explore: case_file {
 
 ## assignment explore
 explore: tm_assignment {
+  hidden: yes
   label: "TM Assignment"
   join: tm_assignee {
     relationship: many_to_one
