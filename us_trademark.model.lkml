@@ -3,9 +3,19 @@ connection: "bigquery-publicdata"
 include: "*.view.lkml"         # include all views in this project
 include: "*.dashboard.lookml"  # include all dashboards in this project
 
+label: "Trademarks"
+
+## caching
+datagroup: thesis_cache {
+  max_cache_age: "24 hour"
+  sql_trigger: SELECT CURRENT_DATE() ;;
+}
+
+
 ## base case file explore
 explore: case_file {
   hidden: yes
+  persist_with: thesis_cache
   join: attorney_assigned_marks {
     relationship: many_to_many
     sql_on: ${case_file.exm_attorney_name} = ${attorney_assigned_marks.attorney_name} ;;
@@ -46,6 +56,7 @@ explore: case_file {
   # aliased table showing attorneys who are also trademark owners
   join: exam_attorney_owners {
     from: owner
+    type: inner
     relationship: many_to_many
     sql_on: ${case_file.exm_attorney_name_orig} = ${exam_attorney_owners.own_name} ;;
   }
