@@ -1,4 +1,3 @@
-
 view: owner {
   sql_table_name: trademark.owner ;;
 
@@ -9,7 +8,7 @@ view: owner {
 
   dimension: own_addr_2 {
     type: string
-    sql: ${TABLE}.own_addr_2 ;;
+    sql: UPPER(${TABLE}.own_addr_2) ;;
   }
 
   dimension: own_addr_city {
@@ -30,6 +29,17 @@ view: owner {
   dimension: own_addr_postal {
     map_layer_name: us_zipcode_tabulation_areas
     sql: IFNULL(${TABLE}.own_addr_postal, 'Not Available') ;;
+  }
+
+  dimension: own_addr_postal_edit {
+    hidden: yes
+    map_layer_name: us_zipcode_tabulation_areas
+    sql: REGEXP_EXTRACT(IFNULL(${TABLE}.own_addr_postal, 'Not Available'), r'[0-9]+') ;;
+  }
+
+  dimension: own_addr_us_postal {
+    map_layer_name: us_zipcode_tabulation_areas
+    sql: CASE WHEN LENGTH(${own_addr_postal_edit}) = 5 THEN ${own_addr_postal_edit} ELSE NULL END ;;
   }
 
   dimension: own_addr_state_cd {
@@ -83,10 +93,11 @@ view: owner {
     sql: UPPER(${TABLE}.own_name) ;;
   }
 
-
   dimension: own_name_ {
+    hidden: yes
     type: string
-    sql: REGEXP_EXTRACT(CASE WHEN ${TABLE}.own_name LIKE '%Mattel%' OR ${TABLE}.own_name LIKE '%MATTEL%' THEN "MATTEL INC"
+    sql:
+            UPPER(CASE WHEN ${TABLE}.own_name LIKE '%Mattel%' OR ${TABLE}.own_name LIKE '%MATTEL%' THEN "MATTEL INC"
               WHEN ${TABLE}.own_name LIKE '%Disney%' OR ${TABLE}.own_name LIKE '%DISNEY%' THEN 'DISNEY ENTERPRISES INC'
               WHEN ${TABLE}.own_name LIKE '%Apple %' OR ${TABLE}.own_name LIKE '%APPLE %'
                 OR ${TABLE}.own_name LIKE '%Apple,%' OR ${TABLE}.own_name LIKE '%APPLE,%'THEN 'APPLE INC'
@@ -114,95 +125,20 @@ view: owner {
               WHEN ${TABLE}.own_name LIKE '%Anheuser-Busch%' OR ${TABLE}.own_name LIKE '%ANHEUSER-BUSCH%' THEN 'Anheuser-Busch, Inc.'
               WHEN ${TABLE}.own_name LIKE '%Sara Lee%' OR ${TABLE}.own_name LIKE '%SARA LEE%' THEN 'SARA LEE CORP'
               ELSE ${TABLE}.own_name
-              END, r'[A-Z0-9\- ]+') ;;
-    #html: <a href="/dashboards/789?OwnerName={{linked_value}}" target="_blank">{{linked_value}}</a> ;;
-
+              END) ;; # REGEX_EXTRACT(my_string, r'[A-Z0-9\- ]+')
   }
 
-# can't return table value within else so need to use case statemenet like above
-#       case: {
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Mattel%' OR ${TABLE}.own_name LIKE '%MATTEL%' ;;
-#           label: "Mattel, Inc."
-#         }
-#         when: {
-#           sql:${TABLE}.own_name LIKE '%Disney%' OR ${TABLE}.own_name LIKE '%DISNEY%' ;;
-#           label: "Disney Enterprises, Inc."
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Apple %' OR ${TABLE}.own_name LIKE '%APPLE %'
-#             OR ${TABLE}.own_name LIKE '%Apple,%' OR ${TABLE}.own_name LIKE '%APPLE,%' ;;
-#           label: "Apple, Inc."
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Hasbro%' OR ${TABLE}.own_name LIKE '%HASBRO%' ;;
-#           label: "Hasbro, Inc."
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Johnson & Johnson%' OR ${TABLE}.own_name LIKE '%JOHNSON & JOHNSON%'
-#             OR ${TABLE}.own_name LIKE '%Johnson and Johnson%' OR ${TABLE}.own_name LIKE '%JOHNSON and JOHNSON%' ;;
-#           label: "Johnson & Johnson"
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Novartis%' OR ${TABLE}.own_name LIKE '%NOVARTIS%' ;;
-#           label: "Novartis"
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Viacom%' OR ${TABLE}.own_name LIKE '%VIACOM%' ;;
-#           label: "Viacom"
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Microsoft%' OR ${TABLE}.own_name LIKE '%MICROSOFT%';;
-#           label: "Microsoft Corp."
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Intel %' OR ${TABLE}.own_name LIKE '%INTEL %'
-#             OR ${TABLE}.own_name LIKE '%Intel,%' OR ${TABLE}.own_name LIKE '%INTEL,%';;
-#           label: "Intel"
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Ibm%' OR ${TABLE}.own_name LIKE '%IBM%' OR ${TABLE}.own_name LIKE '%ibm%'
-#                        OR ${TABLE}.own_name LIKE '%International Business Machines%'
-#                        OR ${TABLE}.own_name LIKE '%INTERNATIONAL BUSINESS MACHINES%' ;;
-#           label: "IBM"
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Cisco%' OR ${TABLE}.own_name LIKE '%CISCO%' ;;
-#           label: "Cisco Systems"
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Oracle%' OR ${TABLE}.own_name LIKE '%ORACLE%' ;;
-#           label: "Oracle Corp."
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Pfizer %' OR ${TABLE}.own_name LIKE '%PFIZER %'
-#             OR ${TABLE}.own_name LIKE '%Pfizer,%' OR ${TABLE}.own_name LIKE '%PFIZER,%' ;;
-#           label: "Pfizer, Inc."
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Ford Motor Company%' OR ${TABLE}.own_name LIKE '%FORD MOTOR COMPANY%' ;;
-#           label: "Ford Motor Company"
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE "%L'Oreal%" OR ${TABLE}.own_name LIKE "%L'OREAL%" ;;
-#           label: "L'Oreal"
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Nestle%' OR ${TABLE}.own_name LIKE '%NESTLE%' ;;
-#           label: "Nestle"
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Anheuser-Busch%' OR ${TABLE}.own_name LIKE '%ABHEUSER-BUSCH%' ;;
-#           label: "Anheuser-Busch, Inc."
-#         }
-#         when: {
-#           sql: ${TABLE}.own_name LIKE '%Sara Lee%' OR ${TABLE}.own_name LIKE '%SARA LEE%' ;;
-#           label: "Sara Lee Corp."
-#         }
-#         # can't return table value within else so need to use case statemenet like above
-#         else: ${TABLE}.own_name
-# #   }
-# #   }
+  dimension: own_name_na {
+    label: "Owner Name"
+    type: string
+    link: {
+      label: "Owner Dashboard"
+      url: "/dashboards/39?Owner%20Name={{ value | url_encode }}"
+      icon_url: "http://www.looker.com/favicon.ico"
+    }
+    sql: CASE WHEN ${own_name_} IS NULL THEN 'N/A' ELSE ${own_name_} END ;;
+
+  }
 
   dimension: own_seq {
     type: string
@@ -233,7 +169,7 @@ view: owner {
       field: own_name_
       value: "-NULL"
     }
-    drill_fields: [own_name_, own_altn_name, own_addr_1, own_addr_2, total_tm_with_owner]
+    drill_fields: [owner_drill_set_count*]
   }
 
   measure: total_tm_with_owner {
@@ -244,7 +180,6 @@ view: owner {
 
   measure: count {
     type: count
-    drill_fields: [own_name, own_altn_name]
   }
 
   measure: count_serial_num {
@@ -259,6 +194,18 @@ view: owner {
   measure: list_tm_class_codes_aftr_1973 {
     type: list
     list_field: tm_class_codes_after1973.mark_class_title
+  }
+
+  measure: list_owner_names {
+    type: list
+    list_field: owner.own_name_
+  }
+
+  set: owner_drill_set_count {
+    fields: [owner.own_name_na,
+            case_file.count,
+            case_file.reg_count,
+            case_file.renew_count]
   }
 
 }

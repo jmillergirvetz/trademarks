@@ -1,4 +1,5 @@
 view: case_file {
+
   sql_table_name: trademark.case_file ;;
 
   dimension_group: abandon_dt {
@@ -134,9 +135,15 @@ view: case_file {
     sql: ${TABLE}.draw_color_file_in ;;
   }
 
+  dimension: exm_attorney_name_orig {
+    hidden: no
+    type: string
+    sql: UPPER(${TABLE}.exm_attorney_name) ;;
+  }
+
   dimension: exm_attorney_name {
     type: string
-    sql: UPPER(IFNULL(${TABLE}.exm_attorney_name, "NO ATTORNEY")) ;;
+    sql: IFNULL(REGEXP_EXTRACT(${TABLE}.exm_attorney_name, r'[A-Z0-9\- ]+'), "NO ATTORNEY") ;;
   }
 
   dimension: exm_office_cd {
@@ -360,6 +367,11 @@ view: case_file {
     sql: cast(${TABLE}.registration_dt as timestamp) ;;
   }
 
+  dimension: registration_yesno {
+    type: yesno
+    sql: ${registration_dt_date} IS NOT NULL ;;
+  }
+
   dimension: registration_no {
     type: string
     sql: ${TABLE}.registration_no ;;
@@ -384,6 +396,11 @@ view: case_file {
     type: time
     timeframes: [date, year, month, day_of_year]
     sql: CAST(${TABLE}.renewal_dt as timestamp) ;;
+  }
+
+  dimension: renewal_yesno {
+    type: yesno
+    sql: ${renewal_dt_date} IS NOT NULL  ;;
   }
 
   dimension: renewal_file_in_original {
@@ -463,12 +480,14 @@ view: case_file {
     sql: ${foreign_app.for_registration_dt_date} IS NOT NULL AND ${ir_registration_dt_date} IS NOT NULL;;
   }
 
+## measures ##
   measure: count {
     type: count
     filters: {
       field: case_file.filing_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set_count*]
   }
 
   measure: us_count {
@@ -478,6 +497,7 @@ view: case_file {
       field: case_file.registration_no
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set_count*]
   }
   measure: ir_count {
     label: "IR Count"
@@ -486,6 +506,7 @@ view: case_file {
       field: case_file.ir_registration_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set_count*]
   }
 
   measure: ir_registration_count {
@@ -495,6 +516,7 @@ view: case_file {
       field: case_file.ir_registration_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set_reg_count*]
   }
 
   measure: ir_renewal_count {
@@ -504,6 +526,7 @@ view: case_file {
       field: case_file.ir_renewal_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set_renew_count*]
   }
 
   measure: for_ir_reg_overlap_count {
@@ -521,11 +544,13 @@ view: case_file {
       field: case_file.exm_attorney_name
       value: "-NO ATTORNEY"
     }
+    drill_fields: [exm_att_drill_set_count*]
   }
 
   measure: distinct_exm_attorney_cnt {
     type: count_distinct
     sql: ${exm_attorney_name} ;;
+    drill_fields: [exm_att_drill_set_count*]
   }
 
   measure: reg_count {
@@ -535,6 +560,7 @@ view: case_file {
       field: case_file.registration_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set_reg_count*]
   }
 
   measure: reg_count_num {
@@ -560,6 +586,7 @@ view: case_file {
       field: case_file.renewal_dt_date
       value: "-NULL"
     }
+    drill_fields: [base_view_drill_set_renew_count*]
   }
 
   measure: filed_renewal_count {
@@ -569,6 +596,7 @@ view: case_file {
       field: case_file.renewal_file_in_
       value: "Yes"
     }
+    drill_fields: [base_view_drill_set_renew_count*]
   }
 
   measure: registered_and_renewed_count {
@@ -624,16 +652,70 @@ view: case_file {
     sql: ${coll_memb_mark_in} ;;
   }
 
+  parameter: list_after_1973 {
+    type: yesno
+  }
+
+  measure: list_classifications {
+    type: string
+    sql: REPLACE(
+              CASE WHEN {% parameter list_after_1973 %} = true
+              THEN ${tm_class_codes_after1973.tm_class_list_after1973}
+              ELSE ${tm_class_codes_before1973.tm_class_list_before1973}
+              END
+              , 'RECORD|', '') ;;
+  }
+
   measure: list_exm_attorneys {
     label: "List of Exam Attorneys"
     type: list
     list_field: case_file.exm_attorney_name
+    html: html: <a href="dashboards/788?ExamAttorneyName={{linked_value}}" target="_blank">{{linked_value}}</a> ;;
   }
 
   measure: list_mark_id_char {
     label: "List of Trademarks"
     type: list
     list_field: case_file.mark_id_char_reg
+  }
+
+  measure: list_owners {
+    label: "List of Owners"
+    type: list
+    list_field: owner.own_name_
+    html: <a href="/dashboards/789?OwnerName={{linked_value}}" target="_blank">{{linked_value}}</a> ;;
+
+  }
+
+
+## sets ##
+
+  set: base_view_drill_set_count {
+    fields: [owner.own_name_na,
+            correspondent_domrep_attorney.readable_attorney_name,
+             case_file.exm_attorney_name,
+             case_file.count]
+    }
+
+  set: base_view_drill_set_reg_count {
+    fields: [owner.own_name_na,
+            correspondent_domrep_attorney.readable_attorney_name,
+            case_file.exm_attorney_name,
+            case_file.reg_count]
+    }
+
+  set: base_view_drill_set_renew_count {
+    fields: [owner.own_name_na,
+            correspondent_domrep_attorney.readable_attorney_name,
+            case_file.exm_attorney_name,
+            case_file.renew_count]
+  }
+
+  set: exm_att_drill_set_count {
+    fields: [case_file.exm_attorney_name,
+      case_file.count,
+      case_file.reg_count,
+      case_file.renew_count]
   }
 
 }
