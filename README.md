@@ -12,6 +12,53 @@ Certification mark  any word, name, symbol, device, or combination of the form
 
 Collective mark  a trademark or service mark used by a collective group or organization, such as associations, cooperatives, and unions, which indicates an individuals membership in that particular group
 
+**Thesis Questions**
+
+* Why did you choose this data?
+  * I was a Global Economics major and have always been interested in what makes a successful company. A large part of a companies image and how the public percives them is through their trademarks and products. Plus Lloyd didn't like my first idea and showed us Looker's public BQ project; Rufus took Iowa Liquour sales, so naturally I went the other way and took trademarks.
+
+* What questions did you go in hoping to answer?
+  * _see below_
+
+* Show us something from your model. Maybe an interesting model structure or a tricky join
+  * Self joins are interesting. The self join that we from owners to exam\_attorney_names will show us which exam attorneys are also owners of trademarks
+
+* Highlight something you learned.
+  * Scaling analytics is half the battle; scaling the knowledge about the analytics is what's next!
+  * Drill baby drill!
+
+* How did this change your understanding of our customers?
+  * It helped my understand that customers who don't understand their data have every right. I wish they had more patience with the expectations that the DCL will have the answer right away, but also appreciate the customers who are willing to work with us and have a disucssion about it. It let's us ask the right questions to understand utlimate goals. Comprehending data and analysis reeals the truth and let's us really understand how a company can be successful.
+
+* What questions do you have for the future?
+  * What trademarks are more likely to be passed? Which of these industry dominators are the important features to inlclude when evaluating the likelynood of trademark registrations?
+  * As a company how are we going to handle helping out customers scale their knowledge base?
+    * Data dictionaries
+    * Framework for "new customers" (this could be any user who is new to Looker even if their company is not)
+      * This could include implementation plans and road maps
+    * Development guidelines
+    * Big picture ideas
+      * Optimized query performance
+      * Considered improving other part of the data pipeline
+      * PDTs and when to use them
+  * Do we fully understand the type data and best practice modeling techniques for it?
+    * What data is relevant?
+    * How can we bring in other data and modeling techniques to better support, drive, and scale customer's analytics?
+
+**Initial Trademark Questions**
+
+* Who dominates the trademark industry?
+  * Owners?
+  * Case Attorneys?
+  * Exam Attorneys?
+  * Classifications?
+* How have the amount of total amount, total registered and renewed trademarks changed overtime?
+* Where are the entities located and what is the filing location of the trademarks?
+* What is happening with trademark transfers?
+* What are the conversion rates of filed to registered trademarks from different entities?
+* Which attorneys are also owners?
+* Are there any outliers?
+
 **Trademark Timeline**
 <p></p>
 <p></p>

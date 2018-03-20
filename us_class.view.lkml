@@ -8,6 +8,7 @@ view: us_class {
   }
 
   dimension: serial_no {
+    primary_key: yes
     type: string
     sql: ${TABLE}.serial_no ;;
   }

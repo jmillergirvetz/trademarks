@@ -1,9 +1,14 @@
 view: correspondent_domrep_attorney {
   sql_table_name: trademark.correspondent_domrep_attorney ;;
 
+## dimensions ##
+
   dimension: attorney_name_orig {
     type: string
-    sql: UPPER(${TABLE}.attorney_name) ;;
+    sql: CASE WHEN ${TABLE}.attorney_name IS NULL
+              THEN "-NOT ASSIGNED-"
+              ELSE UPPER(${TABLE}.attorney_name)
+              END ;;
   }
 
   dimension:attorney_name_remove_address {
@@ -52,6 +57,19 @@ view: correspondent_domrep_attorney {
     sql: ${TABLE}.caddr_4 ;;
   }
 
+  dimension: caddr_4_zipcode_format {
+    hidden: yes
+    map_layer_name: us_zipcode_tabulation_areas
+    sql: CASE WHEN LENGTH(REGEXP_EXTRACT(${caddr_4}, r'[0-9]+')) > 5
+              THEN SUBSTR(REGEXP_EXTRACT(${caddr_4}, r'[0-9]+'), -4, 0)
+              ELSE REGEXP_EXTRACT(${caddr_4}, r'[0-9]+') END;;
+  }
+
+  dimension: caddr_4_zipcode {
+    map_layer_name: us_zipcode_tabulation_areas
+    sql: CASE WHEN LENGTH(${caddr_4_zipcode_format}) = 5 THEN ${caddr_4_zipcode_format} ELSE NULL END ;;
+  }
+
   dimension: caddr_5 {
     type: string
     sql: ${TABLE}.caddr_5 ;;
@@ -67,6 +85,13 @@ view: correspondent_domrep_attorney {
     type: string
     sql: ${TABLE}.serial_no ;;
   }
+
+  dimension: corr_att_own_add_1_2 {
+    type: yesno
+    sql: ${owner.own_addr_1} IS NOT NULL OR ${owner.own_addr_2} IS NOT NULL ;;
+  }
+
+## measures ##
 
   measure: count {
     type: count
@@ -85,6 +110,7 @@ view: correspondent_domrep_attorney {
     label: "Total Distinct Corr Attorney"
     type: count_distinct
     sql: ${TABLE}.attorney_name ;;
+    drill_fields: [corr_att_drill_set_count*]
   }
 
   measure: count_null {
@@ -95,10 +121,27 @@ view: correspondent_domrep_attorney {
     }
   }
 
+  measure: distinct_test {
+    type: count
+    filters: {
+      field: correspondent_domrep_attorney.corr_att_own_add_1_2
+      value: "Yes"
+    }
+  }
+
   measure: list_corr_attorneys {
     label: "List of Correspondent Attorneys"
     type: list
     list_field: correspondent_domrep_attorney.readable_attorney_name
+  }
+
+## sets ##
+
+  set: corr_att_drill_set_count {
+    fields: [correspondent_domrep_attorney.readable_attorney_name,
+            case_file.count,
+            case_file.reg_count,
+            case_file.renew_count]
   }
 
 }
