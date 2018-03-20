@@ -652,6 +652,20 @@ view: case_file {
     sql: ${coll_memb_mark_in} ;;
   }
 
+  parameter: list_after_1973 {
+    type: yesno
+  }
+
+  measure: list_classifications {
+    type: string
+    sql: REPLACE(
+              CASE WHEN {% parameter list_after_1973 %} = true
+              THEN ${tm_class_codes_after1973.tm_class_list_after1973}
+              ELSE ${tm_class_codes_before1973.tm_class_list_before1973}
+              END
+              , 'RECORD|', '') ;;
+  }
+
   measure: list_exm_attorneys {
     label: "List of Exam Attorneys"
     type: list
@@ -673,22 +687,25 @@ view: case_file {
 
   }
 
+
+## sets ##
+
   set: base_view_drill_set_count {
-    fields: [owner.own_name_,
+    fields: [owner.own_name_na,
             correspondent_domrep_attorney.readable_attorney_name,
              case_file.exm_attorney_name,
              case_file.count]
     }
 
   set: base_view_drill_set_reg_count {
-    fields: [owner.own_name_,
+    fields: [owner.own_name_na,
             correspondent_domrep_attorney.readable_attorney_name,
             case_file.exm_attorney_name,
             case_file.reg_count]
     }
 
   set: base_view_drill_set_renew_count {
-    fields: [owner.own_name_,
+    fields: [owner.own_name_na,
             correspondent_domrep_attorney.readable_attorney_name,
             case_file.exm_attorney_name,
             case_file.renew_count]
