@@ -5,7 +5,10 @@ view: correspondent_domrep_attorney {
 
   dimension: attorney_name_orig {
     type: string
-    sql: UPPER(${TABLE}.attorney_name) ;;
+    sql: CASE WHEN ${TABLE}.attorney_name IS NULL
+              THEN "-NOT ASSIGNED-"
+              ELSE UPPER(${TABLE}.attorney_name)
+              END ;;
   }
 
   dimension:attorney_name_remove_address {
