@@ -5,7 +5,10 @@ view: correspondent_domrep_attorney {
 
   dimension: attorney_name_orig {
     type: string
-    sql: UPPER(${TABLE}.attorney_name) ;;
+    sql: CASE WHEN ${TABLE}.attorney_name IS NULL
+              THEN "-NOT ASSIGNED-"
+              ELSE UPPER(${TABLE}.attorney_name)
+              END ;;
   }
 
   dimension:attorney_name_remove_address {
@@ -52,6 +55,19 @@ view: correspondent_domrep_attorney {
   dimension: caddr_4 {
     type: string
     sql: ${TABLE}.caddr_4 ;;
+  }
+
+  dimension: caddr_4_zipcode_format {
+    hidden: yes
+    map_layer_name: us_zipcode_tabulation_areas
+    sql: CASE WHEN LENGTH(REGEXP_EXTRACT(${caddr_4}, r'[0-9]+')) > 5
+              THEN SUBSTR(REGEXP_EXTRACT(${caddr_4}, r'[0-9]+'), -4, 0)
+              ELSE REGEXP_EXTRACT(${caddr_4}, r'[0-9]+') END;;
+  }
+
+  dimension: caddr_4_zipcode {
+    map_layer_name: us_zipcode_tabulation_areas
+    sql: CASE WHEN LENGTH(${caddr_4_zipcode_format}) = 5 THEN ${caddr_4_zipcode_format} ELSE NULL END ;;
   }
 
   dimension: caddr_5 {
